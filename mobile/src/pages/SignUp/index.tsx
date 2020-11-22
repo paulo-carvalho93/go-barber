@@ -39,45 +39,48 @@ const SignUp: React.FC = () => {
 
   const navigation = useNavigation();
 
-  const handleSignUp = useCallback(async (data: SignUpFormData) => {
-    try {
-      formRef.current?.setErrors({});
+  const handleSignUp = useCallback(
+    async (data: SignUpFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        email: Yup.string()
-          .required('E-mail is required')
-          .email('Type a valid e-mail'),
-        password: Yup.string().required('Password is required'),
-      });
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Name is required'),
+          email: Yup.string()
+            .required('E-mail is required')
+            .email('Type a valid e-mail'),
+          password: Yup.string().required('Password is required'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      await api.post('/users', data);
+        await api.post('/users', data);
 
-      Alert.alert(
-        'Successful registration!',
-        'You can now log on to GoBarber!',
-      );
+        Alert.alert(
+          'Successful registration!',
+          'You can now log on to GoBarber!',
+        );
 
-      navigation.goBack();
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+        navigation.goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
 
-        formRef.current?.setErrors(errors);
+          formRef.current?.setErrors(errors);
 
-        return;
+          return;
+        }
+
+        Alert.alert(
+          'Registration error',
+          'An error occurred while registering, please try again!',
+        );
       }
-
-      Alert.alert(
-        'Registration error',
-        'An error occurred while registering, please try again!',
-      );
-    }
-  }, []);
+    },
+    [navigation],
+  );
 
   return (
     <>
@@ -131,13 +134,13 @@ const SignUp: React.FC = () => {
                 textContentType="newPassword"
                 returnKeyType="send"
                 onSubmitEditing={() => {
-                  formRef.current.submitForm();
+                  formRef.current?.submitForm();
                 }}
               />
 
               <Button
                 onPress={() => {
-                  formRef.current.submitForm();
+                  formRef.current?.submitForm();
                 }}
               >
                 Sign In
