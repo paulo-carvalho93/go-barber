@@ -30,9 +30,12 @@ class SendForgotPasswordEmailService {
       throw new AppError('User does not exits.');
     }
 
-    await this.userTokensRepository.generate(user.id);
+    const { token } = await this.userTokensRepository.generate(user.id);
 
-    this.mailProvider.sendMail(email, 'Password request received');
+    await this.mailProvider.sendMail(
+      email,
+      `Password request received: ${token}`,
+    );
   }
 }
 
