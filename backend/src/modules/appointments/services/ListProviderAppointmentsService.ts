@@ -11,17 +11,17 @@ interface IRequest {
 }
 
 @injectable()
-constructor(
-  class ListProviderAppointmentService {
+class ListProviderAppointmentService {
+  constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
   ) {}
 
   public async execute({
     provider_id,
+    day,
     month,
     year,
-    day,
   }: IRequest): Promise<Appointment[]> {
     const appointments = await this.appointmentsRepository.findAllInDayFromProvider(
       {
