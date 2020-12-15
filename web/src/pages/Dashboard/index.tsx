@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { isToday, format } from 'date-fns';
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
@@ -25,11 +26,21 @@ interface MonthAvailabilityItem {
   available: boolean;
 }
 
+interface Appointment {
+  id: string;
+  date: string;
+  user: {
+    name: string;
+    avatar_url: string;
+  };
+}
+
 const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   const [monthAvailability, setMonthAvailability] = useState<
     MonthAvailabilityItem[]
@@ -58,6 +69,20 @@ const Dashboard: React.FC = () => {
       });
   }, [currentMonth, user.id]);
 
+  useEffect(() => {
+    api
+      .get('/appointments/me', {
+        params: {
+          year: selectedDate.getFullYear(),
+          month: selectedDate.getMonth() + 1,
+          day: selectedDate.getDate(),
+        },
+      })
+      .then(response => {
+        setAppointments(response.data);
+      });
+  }, [selectedDate]);
+
   const disabledDays = useMemo(() => {
     const dates = monthAvailability
       .filter(monthDay => monthDay.available === false)
@@ -70,6 +95,14 @@ const Dashboard: React.FC = () => {
 
     return dates;
   }, [currentMonth, monthAvailability]);
+
+  const selectedDateAsText = useMemo(() => {
+    return format(selectedDate, 'MMMM dd');
+  }, [selectedDate]);
+
+  const selectedWeekDay = useMemo(() => {
+    return format(selectedDate, 'cccc');
+  }, [selectedDate]);
 
   return (
     <Container>
@@ -95,9 +128,9 @@ const Dashboard: React.FC = () => {
         <Schedule>
           <h1>Scheduled Times</h1>
           <p>
-            <span>Hoje</span>
-            <span>Day 06</span>
-            <span>Monday</span>
+            {isToday(selectedDate) && <span>Today</span>}
+            <span>{selectedDateAsText}</span>
+            <span>{selectedWeekDay}</span>
           </p>
 
           <NextAppointment>
