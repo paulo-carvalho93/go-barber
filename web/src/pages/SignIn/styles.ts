@@ -39,11 +39,6 @@ export const AnimationContainer = styled.div`
 
   animation: ${appearFromLeft} 1s;
 
-  img {
-    width: 400px;
-    height: 236px;
-  }
-
   form {
     margin: 80px 0;
     width: 340px;
@@ -67,7 +62,7 @@ export const AnimationContainer = styled.div`
   }
 
   > a {
-    color: #7d2929;
+    color: #ff7a00;
     display: block;
     margin-top: 24px;
     text-decoration: none;
@@ -81,7 +76,7 @@ export const AnimationContainer = styled.div`
     }
 
     &:hover {
-      color: ${shade(0.2, '#7D2929')};
+      color: ${shade(0.2, '#ff7a00')};
     }
   }
 `;
@@ -90,5 +85,5 @@ export const Background = styled.div`
   flex: 1;
   background: url(${signInBackgroundImg}) no-repeat center;
   background-size: cover;
-  mix-blend-mode: hard-light;
+  mix-blend-mode: luminosity;
 `;
