@@ -1,6 +1,5 @@
 import React, { useRef, useCallback } from 'react';
 import {
-  Image,
   View,
   ScrollView,
   KeyboardAvoidingView,
@@ -30,14 +29,16 @@ import {
 } from './styles';
 import { useAuth } from '../../hooks/auth';
 
-interface SignUpFormData {
+interface ProfileFormData {
   name: string;
   email: string;
-  pasword: string;
+  old_password: string;
+  password: string;
+  password_confirmation: string;
 }
 
 const Profile: React.FC = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
 
   const formRef = useRef<FormHandles>(null);
 
@@ -49,7 +50,7 @@ const Profile: React.FC = () => {
   const navigation = useNavigation();
 
   const handleSignUp = useCallback(
-    async (data: SignUpFormData) => {
+    async (data: ProfileFormData) => {
       try {
         formRef.current?.setErrors({});
 
@@ -58,18 +59,52 @@ const Profile: React.FC = () => {
           email: Yup.string()
             .required('E-mail is required')
             .email('Type a valid e-mail'),
-          password: Yup.string().required('Password is required'),
+          old_password: Yup.string(),
+          password: Yup.string().when('old_password', {
+            is: val => !!val.length,
+            then: Yup.string().required('Password is required'),
+            otherwise: Yup.string(),
+          }),
+          password_confirmation: Yup.string()
+            .when('old_password', {
+              is: val => !!val.length,
+              then: Yup.string().required('Password confirmation is required'),
+              otherwise: Yup.string(),
+            })
+            .oneOf([Yup.ref('password'), ''], 'Passwords must match'),
         });
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        await api.post('/users', data);
+        const {
+          name,
+          email,
+          old_password,
+          password,
+          password_confirmation,
+        } = data;
+
+        const formData = {
+          name,
+          email,
+          ...(old_password
+            ? {
+                old_password,
+                password,
+                password_confirmation,
+              }
+            : {}),
+        };
+
+        const response = await api.put('/profile', formData);
+
+        updateUser(response.data);
 
         Alert.alert(
-          'Successful registration!',
-          'You can now log on to GoBarber!',
+          'Profile updated successfully!',
+          'Your profile information was updated successfully!',
         );
 
         navigation.goBack();
@@ -83,8 +118,8 @@ const Profile: React.FC = () => {
         }
 
         Alert.alert(
-          'Registration error',
-          'An error occurred while registering, please try again!',
+          'Profile update error',
+          'An error occurred while trying updating your profile, please try again!',
         );
       }
     },
@@ -118,7 +153,7 @@ const Profile: React.FC = () => {
               <Title>My profile</Title>
             </View>
 
-            <Form onSubmit={handleSignUp} ref={formRef}>
+            <Form initialData={user} onSubmit={handleSignUp} ref={formRef}>
               <Input
                 name="name"
                 icon="user"
@@ -172,7 +207,7 @@ const Profile: React.FC = () => {
 
               <Input
                 ref={confirmPasswordInputRef}
-                name="confirm_password"
+                name="password_confirmation"
                 icon="lock"
                 placeholder="Confirm new password"
                 secureTextEntry
