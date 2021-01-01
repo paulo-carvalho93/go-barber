@@ -25,7 +25,7 @@ export const Description = styled.Text`
 `;
 
 export const OkButton = styled(RectButton)`
-  background: #ff9000;
+  background: #ff7a00;
   justify-content: center;
   align-items: center;
   border-radius: 10px;

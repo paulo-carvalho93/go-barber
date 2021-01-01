@@ -28,7 +28,7 @@ export const Container = styled.View<ContainerProps>`
   ${props =>
     props.isFocused &&
     css`
-      border-color: #fff;
+      border-color: #ff7a00;
     `}
 `;
 

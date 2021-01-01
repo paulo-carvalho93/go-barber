@@ -26,7 +26,7 @@ export const HeaderTitle = styled.Text`
 `;
 
 export const UserName = styled.Text`
-  color: #7d2929;
+  color: #ff7a00;
   font-family: 'RobotoSlab-Medium';
 `;
 

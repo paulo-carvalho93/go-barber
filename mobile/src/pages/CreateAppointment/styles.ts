@@ -62,7 +62,7 @@ export const ProvidersList = styled(FlatList as new () => FlatList<Provider>)`
 `;
 
 export const ProviderContainer = styled(RectButton)<ProviderContainerProps>`
-  background: ${props => (props.selected ? '#ff9000' : '#3e3b47')};
+  background: ${props => (props.selected ? '#ff7a00' : '#3e3b47')};
   flex-direction: row;
   align-items: center;
   padding: 8px 12px;
@@ -94,7 +94,7 @@ export const Title = styled.Text`
 
 export const OpenDatePickerButton = styled(RectButton)`
   height: 46px;
-  background: #ff9000;
+  background: #ff7a00;
   border-radius: 10px;
   align-items: center;
   justify-content: center;
@@ -130,7 +130,7 @@ export const SectionContent = styled.ScrollView.attrs({
 
 export const Hour = styled(RectButton)<HourProps>`
   padding: 12px;
-  background: ${props => (props.selected ? '#ff9000' : '#3e3b47')};
+  background: ${props => (props.selected ? '#ff7a00' : '#3e3b47')};
   border-radius: 10px;
   margin-right: 8px;
 
@@ -145,7 +145,7 @@ export const HourText = styled.Text<HourTextProps>`
 
 export const CreateAppointmentButton = styled(RectButton)`
   height: 50px;
-  background: #ff9000;
+  background: #ff7a00;
   border-radius: 10px;
   align-items: center;
   justify-content: center;
