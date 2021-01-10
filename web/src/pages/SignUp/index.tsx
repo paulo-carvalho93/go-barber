@@ -91,7 +91,9 @@ const SignUp: React.FC = () => {
               placeholder="Password"
             />
 
-            <Button type="submit">Create an account</Button>
+            <Button data-testid="btn-signup" type="submit">
+              Create an account
+            </Button>
           </Form>
 
           <Link to="/">
