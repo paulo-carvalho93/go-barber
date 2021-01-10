@@ -51,7 +51,7 @@ const Profile: React.FC = () => {
 
   const navigation = useNavigation();
 
-  const handleSignUp = useCallback(
+  const handleSaveProfile = useCallback(
     async (data: ProfileFormData) => {
       try {
         formRef.current?.setErrors({});
@@ -188,7 +188,7 @@ const Profile: React.FC = () => {
               <Title>My profile</Title>
             </View>
 
-            <Form initialData={user} onSubmit={handleSignUp} ref={formRef}>
+            <Form initialData={user} onSubmit={handleSaveProfile} ref={formRef}>
               <Input
                 name="name"
                 icon="user"
