@@ -64,7 +64,7 @@ describe('Input component', () => {
     fireEvent.blur(inputElement);
 
     await waitFor(() => {
-      expect(containerElement).toHaveStyle('color: #ff7a00');
+      expect(containerElement).toHaveStyle('color:#fff');
     });
   });
 });
